@@ -18,7 +18,8 @@ def get_local(codigo):
 
 for line in sys.stdin:
     placa_trip = line.strip().split('\t')
-    if len(placa_trip)>1:pontos = map(set_point, placa_trip[1][:-1].split('|'))
+    if len(placa_trip)>1:
+        pontos = map(set_point, placa_trip[1][:-1].split('|'))
         print(placa_trip)
         #print(placa_trip[1][:-1])
         pontos = map(set_point, placa_trip[1][:-1].split('|'))
@@ -43,5 +44,4 @@ for line in sys.stdin:
                             cu = conn.cursor()
                             cu.execute("insert into radar_route (origem, destino, the_geom) VALUES (%s, %s, st_geomfromwkb(%s::geometry))", (pontos[i-1]['eq'], pontos[i]['eq'], rot))
                             cu.close()
-
                             conn.commit()
