@@ -33,6 +33,6 @@ for line in sys.stdin:
         print(str(x))
         print("registro mal formado")
         exit();
-    if re.search("00000$"):
-        print "\n"+str(n)
+    if re.search("00000$", str(n))):
+        print("\n"+str(n))
 conn.commit()

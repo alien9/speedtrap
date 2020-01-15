@@ -27,7 +27,7 @@ def viaja(pts):
     tipo=pts[0]['tipo']
     data_e_hora=pts[0]['data_e_hora']
     cur.execute(
-        "INSERT INTO radar.viagens(data_inicio, inicio, tipo) VALUES (%s,%s,%s) returning id",
+        "INSERT INTO viagens(data_inicio, inicio, tipo) VALUES (%s,%s,%s) returning id",
         (data_e_hora, local, tipo)
     )
     viagem_id = cur.fetchone()[0]
@@ -39,17 +39,22 @@ def viaja(pts):
         # vamos considerar apenas os trajetos de menos de duas horas:
         if delta.total_seconds() < 7200 and pts[i - 1]['local'] != pts[i]['local']:
             cur.execute(
-                "INSERT INTO radar.trajetos(viagem,data_inicio, data_final, origem, destino, tipo, v0, v1) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+                "INSERT INTO trajetos(viagem,data_inicio, data_final, origem, destino, tipo, v0, v1) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
                 (viagem_id, pts[i - 1]['data_e_hora'], pts[i]['data_e_hora'], pts[i - 1]['local'], pts[i]['local'],
                  pts[i]['tipo'],pts[i-1]['velocidade'],pts[i]['velocidade'])
                 )
         else:
-            viaja(pts[i:len(pts)])
+            #viaja(pts[i:len(pts)])
+            cur.execute(
+                "INSERT INTO viagens(data_inicio, inicio, tipo) VALUES (%s,%s,%s) returning id",
+                (pts[i]['data_e_hora'], pts[i]['local'], pts[i]['tipo'])
+            )
+            viagem_id = cur.fetchone()[0]
             i=len(pts)
         i+=1
 
     cur.execute(
-        "update radar.viagens  set data_final=%s, final=%s where id=%s",
+        "update viagens  set data_final=%s, final=%s where id=%s",
         (data_e_hora, local, viagem_id)
     )
     conn.commit()
