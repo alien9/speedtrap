@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+# este script serve para comparar o rescaldo à base existente
 import sys, re, psycopg2,datetime
 
 cstring="dbname='bigrs' user='tiago' host='localhost' port='5432'"# password='bigrs'"
