@@ -13,7 +13,7 @@ cur = conn.cursor()
 
 cur.execute("select nextval('trajetos_serial_seq'::regclass)")
 next_trajeto=cur.fetchone()[0]
-cur.execute("select nextval('viagens_serial_seq'::regclass)")
+cur.execute("select nextval('viages_serial_seq'::regclass)")
 next_viagem=cur.fetchone()[0]
 
 file_viagens=open("viagens.csv", "w+", newline='')
@@ -60,17 +60,8 @@ def viaja(pts):
         else:
             trips.append([pts[i]])
             trs+=1
-            #writer_viagens.write(next_viagem,local,data_e_hora,pts[i]['local'],pts[i]['data_e_hora'],pts[i]['tipo'])
-            #next_viagem+=1
         i+=1
     return list(filter(lambda x: len(x) > 1, trips))
-
-    #cur.execute(
-    #    "update viagens  set data_final=%s, final=%s where id=%s",
-    #    (data_e_hora, local, viagem_id)
-    #)
-    #conn.commit()
-
 
 def filtro(p):
     return p!=None
@@ -81,13 +72,13 @@ for line in sys.stdin:
     if re.match('\w+\t\w+', line):
         nv+=1
         placa, trip = re.split('\t', line)
-        print(placa, end="\r")
+        #print(placa, end="\r")
         pontos = list(filter(filtro, re.split('\|', trip)))
         pts=list(filter(filtro, map(ponto, pontos)))
         pts.sort(key=data_e_hora)
         trips=viaja(pts)
         if len(trips)>0:
-            print(trips)
+            #print(trips)
             n+=len(trips)
             for trip in trips:
                 writer_viagens.writerow([
@@ -102,17 +93,17 @@ for line in sys.stdin:
                 while i<len(trip):
                     writer_trajetos.writerow([
                         next_trajeto,
+                        next_viagem,
                         trip[i - 1]['tipo'],
                         trip[i - 1]['data_e_hora'].isoformat(),
                         trip[i]['data_e_hora'].isoformat(),
                         trip[i - 1]['local'],
                         trip[i]['local'],
-                        next_viagem,
                         trip[i - 1]['velocidade'],
-                        trip[i]['velocidade'],
+                        trip[i]['velocidade']
                     ])
                     next_trajeto+=1
-                    print(trip[i])
+                    #print(trip[i])
                     i+=1
                 next_viagem+=1
 

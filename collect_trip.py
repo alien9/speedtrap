@@ -3,7 +3,7 @@
 
 import sys, re, psycopg2,datetime
 
-cstring="dbname='bigrs' user='tiago' host='localhost' port='5432'"# password='bigrs'"
+cstring="dbname='radartona' user='smt_user' host='10.35.200.226' port='5432' password='smt_user'"
 conn = psycopg2.connect(cstring)
 cur = conn.cursor()
 
@@ -39,7 +39,7 @@ def viaja(pts):
         # vamos considerar apenas os trajetos de menos de duas horas:
         if delta.total_seconds() < 7200 and pts[i - 1]['local'] != pts[i]['local']:
             cur.execute(
-                "INSERT INTO trajetos(viagem,data_inicio, data_final, origem, destino, tipo, v0, v1) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+                "INSERT INTO trajetos(viagem_id,data_inicio, data_final, origem, destino, tipo, v0, v1) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
                 (viagem_id, pts[i - 1]['data_e_hora'], pts[i]['data_e_hora'], pts[i - 1]['local'], pts[i]['local'],
                  pts[i]['tipo'],pts[i-1]['velocidade'],pts[i]['velocidade'])
                 )
@@ -50,11 +50,14 @@ def viaja(pts):
             )
             #viaja(pts[i:len(pts)])
             cur.execute(
+                "update viagens set data_final=%s, final=%s where id=%s",
+                (pts[i-1]['data_e_hora'], pts[i-1]['local'], viagem_id)
+            )
+            cur.execute(
                 "INSERT INTO viagens(data_inicio, inicio, tipo) VALUES (%s,%s,%s) returning id",
                 (pts[i]['data_e_hora'], pts[i]['local'], pts[i]['tipo'])
             )
             viagem_id = cur.fetchone()[0]
-            i=len(pts)
         i+=1
 
     cur.execute(

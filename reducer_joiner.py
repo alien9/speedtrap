@@ -19,7 +19,7 @@ for line in sys.stdin:
             line=match.group("line")
             origem=match.group("origem")
             if key==key_atual:
-                print "%s\t%s\t%s\t%s" % (
+                print "%s\t%s\t%s\t%s\t%s" % (
                     key, line_atual, origem_atual, line, origem,
                 )
             origem_atual=origem
