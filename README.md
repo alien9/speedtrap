@@ -58,7 +58,7 @@ São criadas trës tabelas, assim descritas:
 | v1          | integer                  |
 
 
-Para as viagens, as localidades são identificadas por meio da 
+Para as viagens, as localidades são identificadas por meio do identificador de cada equipamento.
 
 O Processamento
 Os dados são inseridos na base HDFS pela execução de um script. Os arquivos de entrada deverão ser disponibilizados em um mountpoint no sistema de arquivos. O upload é realizado pelo protocolo hdfs executado no bash shell:
