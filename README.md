@@ -72,7 +72,7 @@ Este script está preparado para receber a localização de um ou mais arquivos 
 O HDFS é configurado com 10 instâncias rodando Debian 10.0, com 4GB de RAM e 500GB de SSD.  É necessário utilizar o Java 8 (OpenJDK), configurado como padrão em cada uma das instâncias.
 O cluster pode ser controlado a partir do console ssh de uma das instâncias.
 
-Geração de Base Relacional
+### Geração de Base Relacional
 
 Após fazer o upload podemos ler os arquivos por meio do streaming. Podemos executar o procedimento para totalização dos veículos:
 
