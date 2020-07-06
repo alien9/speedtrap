@@ -73,7 +73,7 @@ for line in sys.stdin:
         if match.group("tipo_registro") == "1":
             autuado="1"
         placa="0"
-        if match.group("placa") == "       ":
+        if match.group("placa") != "       ":
             placa="1"
         print "%s%s%s\t%s\t%s\t%s" % (
             match.group("local"),match.group("data"),match.group("tipo_veiculo"),str(1),autuado,placa

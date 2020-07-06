@@ -18,7 +18,11 @@ for f in files:
     filename=os.path.basename(f)
     print(filename)
     print(struk)
-    path = ""
+    r = check_output("hdfs dfs -test -d /data; echo $?", shell=True)
+    if r == b'1\n':
+        os.system("hdfs dfs -mkdir /data")
+
+    path = "/data/"
     for d in struk:
         path += (d+"/")
         print(path)

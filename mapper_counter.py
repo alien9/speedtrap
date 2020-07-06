@@ -55,25 +55,21 @@ L22018020121560545562100075680       1000009200047000
 """
 import sys,re
 import csv
-#import logging, datetime
-#start_time=datetime.datetime.now()
-#logging.basicConfig(level=logging.INFO,filename='../../hadoop/map_reduce.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
-#logging.info("Starting mapper_counter:" + start_time.strftime("%m/%d/%Y, %H:%M:%S"))
 
 registers=0
 for line in sys.stdin:
     line = line.strip()
-    #match = re.search('(?P<setor>.{2})(?P<data>.{8})(?P<hora>.{6})(?P<local>.{4})(?P<faixa>.{1})(?P<serial>.{7})(?P<tipo_registro>.{1})(?P<placa>.{7})(?P<tipo_veiculo>.{1})(?P<classe_veiculo>.{1})(?P<comprimento>.{3})(?P<velocidade>.{3})(?P<tempo_ocupacao>.{5})(?P<velocidade_media>.{3})$', line)
-    # pega data e hora (descarta minutos e segundos)
     match = re.search(
         '(?P<setor>L\d{1})(?P<data>\d{10})(?P<hora>\d{4})(?P<local>\d{4})(?P<faixa>\d{1})(?P<xis>\d{1,2})(?P<serial>\d{7})(?P<tipo_registro>\d{1})(?P<placa>[\s|\w]{7})(?P<tipo_veiculo>[\d|\s]{1})(?P<classe_veiculo>[\d|\s]{1})(?P<comprimento>[\d|\s]{3})(?P<velocidade>[\d|\s]{3})(?P<tempo_ocupacao>[\d|\s]{5})(?P<velocidade_media>[\d|\s]{3})$',
         line)
     if match is not None:
-        print "%s%s%s\t%s" % (
-            match.group("local"),match.group("data"),match.group("tipo_veiculo"),str(1)
+        autuado="0"
+        if match.group("tipo_registro") == "1":
+            autuado="1"
+        placa="0"
+        if match.group("placa") != "       ":
+            placa="1"
+        print "%s%s%s%s\t%s\t%s\t%s" % (
+            match.group("local"),match.group("faixa"),match.group("data"),match.group("tipo_veiculo"),str(1),autuado,placa
         )
     registers+=1
-
-#end_time=datetime.datetime.now()
-#elapsed=str(end_time-start_time)
-#logging.info("End mapper_counter. Elapsed %s, %s registers read" % (elapsed, registers))
