@@ -1,13 +1,15 @@
-#HDFSCameraData
-##Sumário
+ 
+ # HDFSCameraData
+ 
 
-Introdução
+
+## Introdução
 O sistema de monitoramento de tränsito de São Paulo conta com detectores e câmeras para registrar a passagem dos veículos. São medidas as velocidades instantâneas dos veículos e as placas são interpretadas. O registro resultante é arquivado num formato de campos delimitados por tamanho em formato texto.
 O HDFSCameraData consiste em uma base de dados em HDFS (Hadoop File System). Este formato é empregado para consultas agregadas de dados, permitindo extrair informações em um contexto amplo a partir dos dados gerados pelas câmeras e detectores de velocidade. Tais informações estão demonstradas no âmbito deste projeto com a extração dos dados para a API criada no decorrer das Radartona. Esta base de dados relacional foi projetada para utilização pelo front-end da API que for desenvolvida.  
 
 As vantagens da utilização do HDFS são bem aproveitadas neste projeto, que permite explorar os dados de forma a empregar computação distribuída, com um número arbitrário de instâncias contendo os arquivos gerados. Esta forma de armazenamento combina o uso adequado de compactação nos dados  com a redundância de armazenamento dos mesmos, permitindo um uso racional do sistema de arquivos para backup e armazenamento de dados, não somente os gerados pelo sistema de monitoramento de tränsito de São Paulo mas também para qualquer base de dados não relacionais. 
 
-##Objetivos do Procedimento
+## Objetivos do Procedimento
 A execução dos scripts deve gerar um banco de dados relacional contendo dois modelos de dados:
 1) Contagem de veículos por hora por equipamento
 Neste formato, as contagens de veículos são agregadas por hora, identificador de equipamento, pista e tipo de veículo. São contabilizadas as placas lidas no conjunto de veículos detectados, isto é, dentre todos os veículos contados para uma hora e local temos a contagem de placas detectadas.
@@ -15,7 +17,7 @@ Neste formato, as contagens de veículos são agregadas por hora, identificador 
 Este formato contabiliza as viagens detectadas para um mesmo veículo entre os diversos detectores do sistema. O registro contém, além da placa, o tipo de veículo detectado e um conjunto associado ded pontos que fazem parte dos trajetos desenvolvidos pelo veículo.
 O embasamento para a criação deste formato de saída é o emprego em simuladores empregados pela CET. 
 
-##Dados Relacionais
+## Dados Relacionais
 Os dados no formato relacional não contêm informação sensível. Criamos registro de viagens por tipo de veículo, e portanto não é possível, a partir da base de dados relacional, rastrear determinado veiculo. 
 São criadas trës tabelas, assim descritas:
 
