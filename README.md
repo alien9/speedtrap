@@ -1,5 +1,5 @@
-#HDFSCameraData
-##Sumário
+# HDFSCameraData
+## Sumário
 
 Introdução
 O sistema de monitoramento de tränsito de São Paulo conta com detectores e câmeras para registrar a passagem dos veículos. São medidas as velocidades instantâneas dos veículos e as placas são interpretadas. O registro resultante é arquivado num formato de campos delimitados por tamanho em formato texto.
@@ -7,7 +7,7 @@ O HDFSCameraData consiste em uma base de dados em HDFS (Hadoop File System). Est
 
 As vantagens da utilização do HDFS são bem aproveitadas neste projeto, que permite explorar os dados de forma a empregar computação distribuída, com um número arbitrário de instâncias contendo os arquivos gerados. Esta forma de armazenamento combina o uso adequado de compactação nos dados  com a redundância de armazenamento dos mesmos, permitindo um uso racional do sistema de arquivos para backup e armazenamento de dados, não somente os gerados pelo sistema de monitoramento de tränsito de São Paulo mas também para qualquer base de dados não relacionais. 
 
-##Objetivos do Procedimento
+## Objetivos do Procedimento
 A execução dos scripts deve gerar um banco de dados relacional contendo dois modelos de dados:
 1) Contagem de veículos por hora por equipamento
 Neste formato, as contagens de veículos são agregadas por hora, identificador de equipamento, pista e tipo de veículo. São contabilizadas as placas lidas no conjunto de veículos detectados, isto é, dentre todos os veículos contados para uma hora e local temos a contagem de placas detectadas.
