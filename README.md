@@ -1,7 +1,7 @@
-# HDFSCameraData
-## Sumário
+ # HDFSCameraData
+ 
 
-Introdução
+## Introdução
 O sistema de monitoramento de tränsito de São Paulo conta com detectores e câmeras para registrar a passagem dos veículos. São medidas as velocidades instantâneas dos veículos e as placas são interpretadas. O registro resultante é arquivado num formato de campos delimitados por tamanho em formato texto.
 O HDFSCameraData consiste em uma base de dados em HDFS (Hadoop File System). Este formato é empregado para consultas agregadas de dados, permitindo extrair informações em um contexto amplo a partir dos dados gerados pelas câmeras e detectores de velocidade. Tais informações estão demonstradas no âmbito deste projeto com a extração dos dados para a API criada no decorrer das Radartona. Esta base de dados relacional foi projetada para utilização pelo front-end da API que for desenvolvida.  
 
@@ -15,7 +15,7 @@ Neste formato, as contagens de veículos são agregadas por hora, identificador 
 Este formato contabiliza as viagens detectadas para um mesmo veículo entre os diversos detectores do sistema. O registro contém, além da placa, o tipo de veículo detectado e um conjunto associado ded pontos que fazem parte dos trajetos desenvolvidos pelo veículo.
 O embasamento para a criação deste formato de saída é o emprego em simuladores empregados pela CET. 
 
-##Dados Relacionais
+## Dados Relacionais
 Os dados no formato relacional não contêm informação sensível. Criamos registro de viagens por tipo de veículo, e portanto não é possível, a partir da base de dados relacional, rastrear determinado veiculo. 
 São criadas trës tabelas, assim descritas:
 
@@ -56,7 +56,7 @@ São criadas trës tabelas, assim descritas:
 | v1          | integer                  |
 
 
-Para as viagens, as localidades são identificadas por meio da 
+Para as viagens, as localidades são identificadas por meio do identificador de cada equipamento.
 
 O Processamento
 Os dados são inseridos na base HDFS pela execução de um script. Os arquivos de entrada deverão ser disponibilizados em um mountpoint no sistema de arquivos. O upload é realizado pelo protocolo hdfs executado no bash shell:
@@ -70,7 +70,7 @@ Este script está preparado para receber a localização de um ou mais arquivos 
 O HDFS é configurado com 10 instâncias rodando Debian 10.0, com 4GB de RAM e 500GB de SSD.  É necessário utilizar o Java 8 (OpenJDK), configurado como padrão em cada uma das instâncias.
 O cluster pode ser controlado a partir do console ssh de uma das instâncias.
 
-Geração de Base Relacional
+### Geração de Base Relacional
 
 Após fazer o upload podemos ler os arquivos por meio do streaming. Podemos executar o procedimento para totalização dos veículos:
 
