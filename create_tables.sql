@@ -1,6 +1,6 @@
 create table contagens (id serial not null, localidade integer,
  faixa integer,
- tipo  integer, contagem integer
+ tipo  integer, contagem integer,
  autuacoes integer,
  placas integer,
  data_e_hora timestamp with time zone, PRIMARY KEY(id));
