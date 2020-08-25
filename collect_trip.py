@@ -11,9 +11,9 @@ next_trajeto=1
 conn = psycopg2.connect(cstring)
 cur = conn.cursor()
 
-cur.execute("select nextval('trajetos_serial_seq'::regclass)")
+cur.execute("select nextval('trajetos_id_seq'::regclass)")
 next_trajeto=cur.fetchone()[0]
-cur.execute("select nextval('viages_serial_seq'::regclass)")
+cur.execute("select nextval('viagens_id_seq'::regclass)")
 next_viagem=cur.fetchone()[0]
 
 file_viagens=open("viagens.csv", "w+", newline='')
@@ -93,12 +93,12 @@ for line in sys.stdin:
                 while i<len(trip):
                     writer_trajetos.writerow([
                         next_trajeto,
-                        next_viagem,
                         trip[i - 1]['tipo'],
                         trip[i - 1]['data_e_hora'].isoformat(),
                         trip[i]['data_e_hora'].isoformat(),
                         trip[i - 1]['local'],
                         trip[i]['local'],
+                        next_viagem,
                         trip[i - 1]['velocidade'],
                         trip[i]['velocidade']
                     ])
