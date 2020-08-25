@@ -24,4 +24,4 @@ create table trajetos (
  destino  integer,
  viagem  integer,
  v0  integer,
- v1  integer, primwary key(id));
+ v1  integer, primary key(id));
