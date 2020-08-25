@@ -1,6 +1,6 @@
 create table contagens (id serial not null, localidade integer,
  faixa integer,
- tipo  integer, contagem integer
+ tipo  integer, contagem integer,
  autuacoes integer,
  placas integer,
  data_e_hora timestamp with time zone, PRIMARY KEY(id));
@@ -12,7 +12,7 @@ create table viagens (
  data_inicio  timestamp with time zone,
  final  integer,
  data_final  timestamp with time zone,
- tipo, primary key(id));
+ tipo integer, primary key(id));
 
 
 create table trajetos (
@@ -24,4 +24,4 @@ create table trajetos (
  destino  integer,
  viagem  integer,
  v0  integer,
- v1  integer, primwary key(id));
+ v1  integer, primary key(id));
