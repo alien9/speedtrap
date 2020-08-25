@@ -12,7 +12,7 @@ create table viagens (
  data_inicio  timestamp with time zone,
  final  integer,
  data_final  timestamp with time zone,
- tipo, primary key(id));
+ tipo integer, primary key(id));
 
 
 create table trajetos (
