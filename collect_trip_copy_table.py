@@ -18,11 +18,16 @@ cur.execute("DROP INDEX if exists public.trajetos_data_final_idx;\
     DROP INDEX if exists public.trajetos_viagens_idx;\
 ")
 
-cur.execute("select nextval('trajetos_serial_seq'::regclass)")
+cur.execute("select max(id) from trajetos")
 next_trajeto=cur.fetchone()[0]
-cur.execute("select nextval('viages_serial_seq'::regclass)")
+if next_trajeto is None:
+    next_trajeto=0
+cur.execute("select max(id) from viagens")
 next_viagem=cur.fetchone()[0]
-
+if next_viagem is None:
+    next_viagem=0
+next_trajeto+=1
+next_viagem+=1
 file_viagens=open("viagens.csv", "w+", newline='')
 file_trajetos=open("trajetos.csv", "w+", newline='')
 writer_trajetos=csv.writer(file_trajetos)
@@ -145,7 +150,9 @@ CREATE INDEX trajetos_origem_idx\
 CREATE INDEX trajetos_viagens_idx\
     ON public.trajetos USING btree\
     (viagem_id ASC NULLS LAST)\
-    TABLESPACE pg_default;")
+    TABLESPACE pg_default;\
+        select setval(pg_get_serial_sequence ( 'trajetos', 'id' ), (select max(id) from trajetos), true);\
+            select setval(pg_get_serial_sequence ( 'viagens', 'id' ), (select max(id) from viagens), true);")
 
 
 """ viagens 
