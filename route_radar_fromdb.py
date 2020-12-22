@@ -3,7 +3,7 @@
 from roteirize import *
 import sys,re,datetime,psycopg2
 
-cstring="dbname='bigrs' user='tiago' host='localhost' port='5432'"# password='bigrs'"
+from config import cstring
 conn = psycopg2.connect(cstring)
 cursor = conn.cursor()
 
@@ -12,20 +12,24 @@ def set_point(p):
     return {'eq':s[0],'ts':datetime.datetime.strptime(s[1], '%Y-%m-%d %H:%M:%S')}
 
 def get_local(codigo):
-    cursor.execute("select st_x(e.geom), st_y(e.geom),s.codigo from equipamentos e join sensor s on s.equipamento_id=e.gid where s.codigo=%s",
-               (codigo,))
+    #cursor.execute("select st_x(e.geom), st_y(e.geom),s.codigo from equipamentos e join sensor s on s.equipamento_id=e.gid where s.codigo=%s",
+    #           (codigo,))
+    cursor.execute("select  st_x(geom), st_y(geom),codigo from base_radares where position(%s in codigo) > 0;",
+               (str(codigo),))
     return cursor.fetchone()
 
-cursor.execute("select * from radar.trajetos")
+cursor.execute("select t.origem, t.destino, t.tipo, r.id from trajetos t left join radar_route r on r.origem=t.origem and r.destino=t.destino where r.id is null")
 r=cursor.fetchall()
 for line in r:
-    print line
-    tipo=line[1]
-    origem = get_local(line[4])
-    destino = get_local(line[5])
+    print(line)
+    tipo=line[2]
+    o=line[0]
+    d=line[1]
+    origem = get_local(o)
+    destino = get_local(d)
     if origem is not None and destino is not None:
         cursor.execute("select * from radar_route where origem=%s and destino=%s",
-                       (origem[2], destino[2],))
+                       (o, d,))
         existent = cursor.fetchall()
         if len(existent) == 0:
             rot = roteirize([origem[0], origem[1]], [destino[0], destino[1]], cursor)
@@ -35,7 +39,7 @@ for line in r:
                 cu = conn.cursor()
                 cu.execute(
                     "insert into radar_route (origem, destino, the_geom) VALUES (%s, %s, st_geomfromwkb(%s::geometry))",
-                    (origem[2], destino[2], rot))
+                    (o, d, rot))
                 cu.close()
                 conn.commit()
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys,psycopg2
-
+from config import cstring
 
 
 def reverse_geocode(x,y,cursor):
@@ -16,6 +16,9 @@ def reverse_geocode(x,y,cursor):
     return cursor.fetchone()
 
 def roteirize(p,q, cursor):
+    if p==q:
+        print("Nothing to do, start equals end")
+        return None
     origem = reverse_geocode(p[0],p[1],cursor)
     #print(origem)
     destino=reverse_geocode(q[0],q[1],cursor)
@@ -31,29 +34,37 @@ def roteirize(p,q, cursor):
     #))
     res = cursor.fetchone();
     g=res[0]
-    #print((res[0], "SRID=4326;POINT(%s %s)" % (p[0], p[1],),res[0],"SRID=4326;POINT(%s %s)" % (q[0],q[1],)))
+    print("now")
+    print(g)
+    print("SRID=4326;POINT(%s %s)" % (p[0], p[1],))
+    print("SRID=4326;POINT(%s %s)" % (q[0], q[1],))
     cursor.execute("select st_linelocatepoint(st_geomfromwkb(%s::geometry),st_transform(st_geomfromewkt(%s), 31983)) as ini, st_linelocatepoint(st_geomfromwkb(%s::geometry),st_transform(st_geomfromewkt(%s), 31983)) as fim",
                    (res[0], "SRID=4326;POINT(%s %s)" % (p[0], p[1],),res[0],"SRID=4326;POINT(%s %s)" % (q[0],q[1],)),
                    )
-    ps=list(cursor.fetchone())
+    ps=list(filter(lambda x: x is not None, list(cursor.fetchone())))
+    print(ps)
     ps.sort()
-    cursor.execute("select g, st_geometrytype(g) from (select g from (select st_linesubstring(st_geomfromwkb(%s::geometry), %s, %s) as g) h)o", (res[0], ps[0], ps[1]))
-
-    #for r in res:
-    #    cursor.execute("select geom from segmento_viario where gid=%s", r[3])
-    res=cursor.fetchone()
-    print res
-    if not res[1]=='ST_LineString':
+    if len(ps)==0:
+        print("Not found")
         return None
-    return res[0]
+    else:
+        cursor.execute("select g, st_geometrytype(g) from (select g from (select st_linesubstring(st_geomfromwkb(%s::geometry), %s, %s) as g) h)o", (res[0], ps[0], ps[1]))
+
+        #for r in res:
+        #    cursor.execute("select geom from segmento_viario where gid=%s", r[3])
+        res=cursor.fetchone()
+        print("res")
+        print(res)
+        if not res[1]=='ST_LineString':
+            return None
+        return res[0]
 
 if __name__ == "__main__":
     if len(sys.argv)==5:
-        cstring = "dbname='bigrs' user='tiago' host='localhost' port='5432'"  # password='bigrs'"
         conn = psycopg2.connect(cstring)
         cursor = conn.cursor()
-        print roteirize(
+        print(roteirize(
             [sys.argv[1],sys.argv[2]],[sys.argv[3],sys.argv[4]],cursor
-        )
+        ))
     else:
-        print "Faltam parâmetos"
+        print("Faltam parâmetos")
