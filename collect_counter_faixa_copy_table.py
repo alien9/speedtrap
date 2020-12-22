@@ -4,8 +4,7 @@
 #465520180201210	9
 
 import sys, re, psycopg2, csv
-
-cstring="dbname=radartona user='smt_user' user='smt_user' host='10.35.200.226' port='5432' password='smt_user'"
+from config import cstring
 conn = psycopg2.connect(cstring)
 cur = conn.cursor()
 try:
@@ -17,6 +16,8 @@ except:
 
 cur.execute("select max(id) from contagens")
 vid=cur.fetchone()[0]
+if vid is None:
+    vid=0
 vid+=1
 
 file_contagens=open("contagens.csv", "w+", newline='')
@@ -78,8 +79,8 @@ CREATE INDEX contagens_data\
     ((timezone('GMT-3'::text, data_e_hora)::date) ASC NULLS LAST)\
     TABLESPACE pg_default;\
 \
-select setval(pg_get_serial_sequence ( 'contagens', 'id' ), (select max(id) from contagens), true);
-")
+select setval(pg_get_serial_sequence ( 'contagens', 'id' ), (select max(id) from contagens), true);")
+
 """
                                        Table "public.contagens"
    Column    |           Type           | Collation | Nullable |                Default

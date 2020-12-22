@@ -88,36 +88,37 @@ for line in sys.stdin:
         pontos = list(filter(filtro, re.split('\|', trip)))
         pts=list(filter(filtro, map(ponto, pontos)))
         pts.sort(key=data_e_hora)
-        trips=viaja(pts)
-        if len(trips)>0:
-            #print(trips)
-            n+=len(trips)
-            for trip in trips:
-                writer_viagens.writerow([
-                    next_viagem,
-                    trip[0]['local'],
-                    trip[0]['data_e_hora'].isoformat(),
-                    trip[len(trip)-1]['local'],
-                    trip[len(trip)-1]['data_e_hora'].isoformat(),
-                    trip[0]['tipo']
-                ])
-                i=1
-                while i<len(trip):
-                    writer_trajetos.writerow([
-                        next_trajeto,
+        if len(pts)>1:
+            trips=viaja(pts)
+            if len(trips)>0:
+                #print(trips)
+                n+=len(trips)
+                for trip in trips:
+                    writer_viagens.writerow([
                         next_viagem,
-                        trip[i - 1]['tipo'],
-                        trip[i - 1]['data_e_hora'].isoformat(),
-                        trip[i]['data_e_hora'].isoformat(),
-                        trip[i - 1]['local'],
-                        trip[i]['local'],
-                        trip[i - 1]['velocidade'],
-                        trip[i]['velocidade']
+                        trip[0]['local'],
+                        trip[0]['data_e_hora'].isoformat(),
+                        trip[len(trip)-1]['local'],
+                        trip[len(trip)-1]['data_e_hora'].isoformat(),
+                        trip[0]['tipo']
                     ])
-                    next_trajeto+=1
-                    #print(trip[i])
-                    i+=1
-                next_viagem+=1
+                    i=1
+                    while i<len(trip):
+                        writer_trajetos.writerow([
+                            next_trajeto,
+                            next_viagem,
+                            trip[i - 1]['tipo'],
+                            trip[i - 1]['data_e_hora'].isoformat(),
+                            trip[i]['data_e_hora'].isoformat(),
+                            trip[i - 1]['local'],
+                            trip[i]['local'],
+                            trip[i - 1]['velocidade'],
+                            trip[i]['velocidade']
+                        ])
+                        next_trajeto+=1
+                        #print(trip[i])
+                        i+=1
+                    next_viagem+=1
 
 #conn.commit()
 print("%s veículos encontrados." % (nv,))
