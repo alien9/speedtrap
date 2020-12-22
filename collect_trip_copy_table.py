@@ -79,7 +79,9 @@ def filtro(p):
     return p!=None
 n=0
 nv=0
+total=0
 for line in sys.stdin:
+    total+=1
     line = line.strip()
     if re.match('\w+\t\w+', line):
         nv+=1
@@ -106,23 +108,24 @@ for line in sys.stdin:
                     while i<len(trip):
                         writer_trajetos.writerow([
                             next_trajeto,
-                            next_viagem,
                             trip[i - 1]['tipo'],
                             trip[i - 1]['data_e_hora'].isoformat(),
                             trip[i]['data_e_hora'].isoformat(),
                             trip[i - 1]['local'],
                             trip[i]['local'],
                             trip[i - 1]['velocidade'],
-                            trip[i]['velocidade']
+                            trip[i]['velocidade'],
+                            next_viagem,
+                            
                         ])
                         next_trajeto+=1
                         #print(trip[i])
                         i+=1
                     next_viagem+=1
-    if re.search("000000$", str(n)):
-        print(str(n))
-    if re.search("0000000$", str(n)):
-        print("copy table "+str(n))
+    if re.search("00000$", str(total)):
+        print(str(total))
+    if re.search("000000$", str(total)):
+        print("copy table "+str(total))
         file_trajetos.close()
         file_viagens.close()
         with open("trajetos.csv", 'r') as f:
