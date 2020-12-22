@@ -119,6 +119,21 @@ for line in sys.stdin:
                         #print(trip[i])
                         i+=1
                     next_viagem+=1
+    if re.search("000000$", str(n)):
+        print(str(n))
+    if re.search("0000000$", str(n)):
+        print("copy table "+str(n))
+        file_trajetos.close()
+        file_viagens.close()
+        with open("trajetos.csv", 'r') as f:
+            cur.copy_from(f, 'trajetos', sep=',')
+        with open("viagens.csv", 'r') as f:
+            cur.copy_from(f, 'viagens', sep=',')
+        file_viagens=open("viagens.csv", "w+", newline='')
+        file_trajetos=open("trajetos.csv", "w+", newline='')
+        writer_trajetos=csv.writer(file_trajetos)
+        writer_viagens=csv.writer(file_viagens)
+        conn.commit()
 
 #conn.commit()
 print("%s veículos encontrados." % (nv,))
