@@ -64,11 +64,9 @@ def viaja(pts):
         delta = pts[i]['data_e_hora'] - pts[i - 1]['data_e_hora']
         data_e_hora=pts[i]['data_e_hora']
         local=pts[i]['local']
-        # vamos considerar apenas os trajetos de menos de duas horas:
-        if delta.total_seconds() < 7200 and pts[i - 1]['local'] != pts[i]['local']:
+        # vamos considerar apenas os trajetos de menos de 30 minutos:
+        if delta.total_seconds() < 1800 and pts[i - 1]['local'] != pts[i]['local']:
             trips[len(trips)-1].append(pts[i])
-            #writer_trajetos.write(next_trajeto, next_viagem, pts[i]['tipo'], pts[i-1]['data_e_hora'], pts[i]['data_e_hora'],pts[i]['local'],pts[i-1]['local'],pts[i-1]['velocidade'],pts[i]['velocidade'])
-            #next_trajeto+=1
         else:
             trips.append([pts[i]])
             trs+=1
@@ -172,7 +170,7 @@ CREATE INDEX trajetos_viagens_idx\
     TABLESPACE pg_default;\
         select setval(pg_get_serial_sequence ( 'trajetos', 'id' ), (select max(id) from trajetos), true);\
             select setval(pg_get_serial_sequence ( 'viagens', 'id' ), (select max(id) from viagens), true);")
-
+conn.commit()
 
 """ viagens 
  id          | integer                  |           | not null | nextval('radar.viagens_id_seq'::regclass)

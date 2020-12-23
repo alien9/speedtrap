@@ -80,7 +80,7 @@ CREATE INDEX contagens_data\
     TABLESPACE pg_default;\
 \
 select setval(pg_get_serial_sequence ( 'contagens', 'id' ), (select max(id) from contagens), true);")
-
+conn.commit()
 """
                                        Table "public.contagens"
    Column    |           Type           | Collation | Nullable |                Default
