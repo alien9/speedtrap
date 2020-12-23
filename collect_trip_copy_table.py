@@ -122,9 +122,9 @@ for line in sys.stdin:
                         #print(trip[i])
                         i+=1
                     next_viagem+=1
-    if re.search("000$", str(n_trips)):
-        print("linhas %s, viagens %s, trajetos %s " % (str(total), n, i))
-    if re.search("000000$", str(n)):
+    if re.search("000000$", str(total)):
+        print("linhas %s, viagens %s " % (str(total), n))
+    if re.search("000000$", str(total)):
         print("copy table "+str(total))
         file_trajetos.close()
         file_viagens.close()
