@@ -17,7 +17,7 @@ cur.execute("DROP INDEX if exists public.trajetos_data_final_idx;\
     DROP INDEX if exists public.trajetos_origem_idx;\
     DROP INDEX if exists public.trajetos_viagens_idx;\
 ")
-
+conn.commit()
 cur.execute("select max(id) from trajetos")
 next_trajeto=cur.fetchone()[0]
 if next_trajeto is None:
@@ -121,7 +121,7 @@ for line in sys.stdin:
                         i+=1
                     next_viagem+=1
     if re.search("00000$", str(total)):
-        print(str(total))
+        print("linhas %s, viagens %s, trajetos %s " % (str(total), n, i)
     if re.search("000000$", str(total)):
         print("copy table "+str(total))
         file_trajetos.close()
@@ -130,11 +130,12 @@ for line in sys.stdin:
             cur.copy_from(f, 'trajetos', sep=',')
         with open("viagens.csv", 'r') as f:
             cur.copy_from(f, 'viagens', sep=',')
+        conn.commit()
         file_viagens=open("viagens.csv", "w+", newline='')
         file_trajetos=open("trajetos.csv", "w+", newline='')
         writer_trajetos=csv.writer(file_trajetos)
         writer_viagens=csv.writer(file_viagens)
-        conn.commit()
+        
 
 #conn.commit()
 print("%s veículos encontrados." % (nv,))

@@ -11,6 +11,7 @@ try:
     cur.execute("DROP INDEX if exists public.contagens_data;\
         DROP INDEX if exists public.contagens_data_e_hora;\
     DROP INDEX if exists public.contagens_localidade;")
+    conn.commit()
 except:
     print("indexes not dropped")
 
