@@ -78,6 +78,7 @@ def filtro(p):
 n=0
 nv=0
 total=0
+n_trips=0
 for line in sys.stdin:
     total+=1
     line = line.strip()
@@ -94,6 +95,7 @@ for line in sys.stdin:
                 #print(trips)
                 n+=len(trips)
                 for trip in trips:
+                    n_trips+=1
                     writer_viagens.writerow([
                         next_viagem,
                         trip[0]['local'],
@@ -120,8 +122,8 @@ for line in sys.stdin:
                         #print(trip[i])
                         i+=1
                     next_viagem+=1
-    if re.search("00000$", str(n)):
-        print("linhas %s, viagens %s, trajetos %s " % (str(total), n, i)
+    if re.search("000$", str(n_trips)):
+        print("linhas %s, viagens %s, trajetos %s " % (str(total), n, i))
     if re.search("000000$", str(n)):
         print("copy table "+str(total))
         file_trajetos.close()
